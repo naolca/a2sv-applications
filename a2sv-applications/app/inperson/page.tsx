@@ -7,11 +7,8 @@ import getTheme from "../getTheme";
 import SendIcon from '@mui/icons-material/Send';
 
 import { useGetInpersonApplicationsQuery } from "../redux/slices/applications_slice";
-const textInputs = [
-  { label: "First Name", example: "John" },
-  { label: "Last Name", example: "Doe" },
-  { label: "Email", example: "firaolibrahim@gmail.com"  },
-]
+import DropDownInputCard from "../components/DropDownInputCard";
+import RadioInputCard from "../components/RadioInputCard";
 
 
 interface Data {
@@ -51,6 +48,23 @@ export default function inperson() {
       // unpack the data to different variables
       console.log(data)
       const {texts, numbers, dropdowns, checkboxes, radios} = data as Data;
+      const textsArray = [];
+      for (let i = 0; i < texts.length; i++) {
+        textsArray.push(<TextInputCard key={i} label={texts[i].label} example={texts[i].example}  backClick={back} nextClick={next}  />);
+      }
+
+      const dropdownsArray = [];
+      for (let i = 0; i < dropdowns.length; i++) {
+        dropdownsArray.push(<DropDownInputCard  label={dropdowns[i].label} choices = {dropdowns[i].choices} nextClick = {next} backClick = {back}   />);
+      }
+
+      const radiosArray = [];
+      for (let i = 0; i < checkboxes.length; i++) {
+        radiosArray.push(<RadioInputCard key={i} label={radios[i].label} choices = {radios[i].choices} backClick={back} nextClick={next}   />);
+      }
+      const inputs =[...radiosArray, ...textsArray, ...radiosArray];
+      
+
     
 
   
@@ -61,24 +75,8 @@ export default function inperson() {
     <Box sx={{ bgcolor: 'background.default', justifyContent:"center", alignItems:"center", rowGap:10, minHeight:'100vh', columnGap:10 }}>
 
       {
-        texts.map((input, index) => (
-          idx == index && <TextInputCard
-            
-           key={index} label={input.label} example={input.example}  backClick={back} nextClick={next}  />
-        ))
+       inputs[idx]
       }
-
-
-
-      {/* {
-        idx === 2 && (
-          <Button
-            sx={{position:'relative', bottom:2 , right:2,  backgroundColor: 'primary.main', color: 'white', '&:hover': {backgroundColor: 'primary.dark' }}}
-           variant="contained" endIcon={<SendIcon />}>
-            Send
-          </Button>
-        )
-      } */}
     </Box>
     </ThemeProvider>
    

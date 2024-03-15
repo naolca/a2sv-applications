@@ -23,6 +23,9 @@ class ApplicationsService {
     static async getFieldsForInpersonApplication() {
         return await applicationsRepository_1.default.getFieldsForInpersonApplication();
     }
+    static async getFieldsForRemoteApplication() {
+        return await applicationsRepository_1.default.getFieldsForRemoteApplication();
+    }
 }
 exports.default = ApplicationsService;
 //# sourceMappingURL=applicationsService.js.map

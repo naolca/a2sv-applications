@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Container from "@mui/material/Container";
-import { motion } from "framer-motion"
+import { motion } from "framer-motion";
 import {
   Button,
   FormControl,
@@ -15,18 +15,26 @@ import {
   Radio,
   RadioGroup,
   Select,
+  SvgIcon,
 } from "@mui/material";
+
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 
 interface RadioInputCardProps {
   label: string;
   choices: string[];
   value?: string;
+  nextClick?: () => void;
+  backClick?: () => void;
 }
 
 export default function RadioInputCard({
   label,
   choices,
   value,
+  nextClick,
+  backClick,
 }: RadioInputCardProps) {
   return (
     <Box
@@ -106,16 +114,59 @@ export default function RadioInputCard({
                   defaultValue="female"
                   name="radio-buttons-group"
                 >
-                    {choices.map((choice, index) => (
-                        <FormControlLabel
-                        key={index}
-                        value={choice}
-                        control={<Radio />}
-                        label={choice}
-                        />
-                    ))}
+                  {choices.map((choice, index) => (
+                    <FormControlLabel
+                      key={index}
+                      value={choice}
+                      control={<Radio />}
+                      label={choice}
+                    />
+                  ))}
                 </RadioGroup>
               </FormControl>
+              <div className="flex self-end">
+                <SvgIcon
+                  component={ArrowUpwardIcon}
+                  onClick={backClick}
+                  sx={{
+                    color: (theme) =>
+                      theme.palette.mode === "light" ? "black" : "white",
+                    alignSelf: "start",
+                    position: "relative",
+                    left: 0,
+                    bottom: 0,
+                    cursor: "pointer",
+                    ":hover": {
+                      color: (theme) =>
+                        theme.palette.mode === "light"
+                          ? "primary.main"
+                          : "primary.light",
+                    },
+                    transition: "color 0.5s",
+                  }}
+                />
+
+                <SvgIcon
+                  onClick={nextClick}
+                  sx={{
+                    color: (theme) =>
+                      theme.palette.mode === "light" ? "black" : "white",
+                    alignSelf: "end",
+                    position: "relative",
+                    right: 0,
+                    bottom: 0,
+                    cursor: "pointer",
+                    ":hover": {
+                      color: (theme) =>
+                        theme.palette.mode === "light"
+                          ? "primary.main"
+                          : "primary.light",
+                    },
+                    transition: "color 0.5s",
+                  }}
+                  component={ArrowDownwardIcon}
+                />
+              </div>
             </Box>
           </FormGroup>
         </Card>

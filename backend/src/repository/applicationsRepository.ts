@@ -51,6 +51,16 @@ class ApplicationsRepository {
         return fields;
 
     }
+
+    async getFieldsForRemoteApplication() {
+        const texts = await textFieldModel.find({ forms: { $in: ["RE"] } });
+        const numbers = await numberFieldModel.find({ forms: { $in: ["RE"] } });
+        const dropdowns = await dropdownFieldModel.find({ forms: { $in: ["RE"] } });
+        const checkboxes = await checkboxFieldModel.find({ forms: { $in: ["RE"] } });
+        const radios = await radioFieldModel.find({ forms: { $in: ["RE"] } });
+        const fields = {texts, numbers, dropdowns, checkboxes, radios };
+        return fields;
+    }
 }
 
 

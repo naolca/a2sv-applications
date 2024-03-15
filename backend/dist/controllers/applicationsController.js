@@ -60,6 +60,15 @@ class ApplicationsController {
             res.status(500).json({ error: error.message });
         }
     }
+    static async getFieldsForRemoteApplication(req, res) {
+        try {
+            const fields = await applicationsService_1.default.getFieldsForRemoteApplication();
+            res.status(200).json(fields);
+        }
+        catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    }
 }
 exports.default = ApplicationsController;
 //# sourceMappingURL=applicationsController.js.map

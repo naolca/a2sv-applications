@@ -43,6 +43,15 @@ class ApplicationsRepository {
         const fields = { texts, numbers, dropdowns, checkboxes, radios };
         return fields;
     }
+    async getFieldsForRemoteApplication() {
+        const texts = await TextFieldModel_1.default.find({ forms: { $in: ["RE"] } });
+        const numbers = await NumberFieldModel_1.default.find({ forms: { $in: ["RE"] } });
+        const dropdowns = await DropDownFieldModel_1.default.find({ forms: { $in: ["RE"] } });
+        const checkboxes = await CheckBoxFieldModel_1.default.find({ forms: { $in: ["RE"] } });
+        const radios = await RadioFieldModel_1.default.find({ forms: { $in: ["RE"] } });
+        const fields = { texts, numbers, dropdowns, checkboxes, radios };
+        return fields;
+    }
 }
 exports.default = new ApplicationsRepository();
 //# sourceMappingURL=applicationsRepository.js.map

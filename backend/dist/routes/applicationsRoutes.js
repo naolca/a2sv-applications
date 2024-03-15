@@ -12,5 +12,6 @@ router.post('/dropdownfield', applicationsController_1.default.createDropDownFie
 router.post('/checkboxfield', applicationsController_1.default.createCheckBoxField);
 router.post('/radiofield', applicationsController_1.default.createRadioField);
 router.get('/inperson', applicationsController_1.default.getFieldsForInpersonApplication);
+router.get('/remote', applicationsController_1.default.getFieldsForRemoteApplication);
 exports.default = router;
 //# sourceMappingURL=applicationsRoutes.js.map

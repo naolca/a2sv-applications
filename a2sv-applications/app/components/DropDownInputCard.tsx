@@ -10,29 +10,55 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  SvgIcon,
 } from "@mui/material";
+import React from "react";
+
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+import { motion } from "framer-motion";
 
 interface DropDownInputCardProps {
   label: string;
   choices: string[];
   value?: string;
+  nextClick?: () => void;
+  backClick?: () => void;
 }
 
 export default function DropDownInputCard({
   label,
   choices,
   value,
+  nextClick,
+  backClick,
 }: DropDownInputCardProps) {
+  const [currentChoice, setCurrentChoice] = React.useState("");
+
+  const handleChange = (e: any) => {
+    e.preventDefault();
+    setCurrentChoice(e.target.value);
+  };
+
   return (
     <Box
-      height={400}
-      width={700}
+     
+      maxHeight={400}
+      maxWidth={700}
       display="flex"
       alignItems="center"
       justifyContent="center"
       m={"auto"}
       gap={4}
-      component="section"
+      component={motion.section}
+      initial={{ opacity: 0, y: '100vh'  }}
+      animate={{ opacity: 1, x: 0, y: 0 }}
+      exit={{
+        opacity: 0,
+        y: "-100vh",
+        transition: { duration: 1 },
+      }}
+      transition={{ type: "tween", duration: 1 }}
     >
       <Container
         sx={{
@@ -97,15 +123,60 @@ export default function DropDownInputCard({
                 <Select
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
-                  value={label}
+                  value={currentChoice}
+                  onChange={handleChange}
                   label={label}
                 >
-                  {choices.map((choice) => (
-                    <MenuItem value={choice}>{choice}</MenuItem>
+                  {choices.map((choice, index) => (
+                    <MenuItem key={index} value={choice}>
+                      {choice}
+                    </MenuItem>
                   ))}
                 </Select>
               </FormControl>
-              
+              <div className="flex self-end">
+                <SvgIcon
+                  component={ArrowUpwardIcon}
+                  onClick={backClick}
+                  sx={{
+                    color: (theme) =>
+                      theme.palette.mode === "light" ? "black" : "white",
+                    alignSelf: "start",
+                    position: "relative",
+                    left: 0,
+                    bottom: 0,
+                    cursor: "pointer",
+                    ":hover": {
+                      color: (theme) =>
+                        theme.palette.mode === "light"
+                          ? "primary.main"
+                          : "primary.light",
+                    },
+                    transition: "color 0.5s",
+                  }}
+                />
+
+                <SvgIcon
+                  onClick={nextClick}
+                  sx={{
+                    color: (theme) =>
+                      theme.palette.mode === "light" ? "black" : "white",
+                    alignSelf: "end",
+                    position: "relative",
+                    right: 0,
+                    bottom: 0,
+                    cursor: "pointer",
+                    ":hover": {
+                      color: (theme) =>
+                        theme.palette.mode === "light"
+                          ? "primary.main"
+                          : "primary.light",
+                    },
+                    transition: "color 0.5s",
+                  }}
+                  component={ArrowDownwardIcon}
+                />
+              </div>
             </Box>
           </FormGroup>
         </Card>

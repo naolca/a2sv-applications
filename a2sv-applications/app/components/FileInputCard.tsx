@@ -16,6 +16,7 @@ import {
 import { File } from "buffer";
 
 
+
 const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
     clipPath: 'inset(50%)',
@@ -33,7 +34,15 @@ interface FileInputCardProps {
   value?: File;
 }
 
+async function uploadFile(file:any) {
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    console.log(e.target?.result);
+  }
+  reader.readAsBinaryString(file);
+  
 
+}
 
 
 
@@ -120,7 +129,12 @@ export default function FileInputCard({
                 startIcon={<CloudUploadIcon />}
             >
                 Upload file
-                <VisuallyHiddenInput type="file" />
+                <VisuallyHiddenInput type="file" onChange={(e) => {
+                  if (e.target.files?.length) {
+                    console.log(e.target.files[0])
+                    uploadFile(e.target.files[0]);
+                  }
+                }} />
             </Button>
               
             </Box>

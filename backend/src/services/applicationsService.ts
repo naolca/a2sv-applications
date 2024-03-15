@@ -26,6 +26,10 @@ class ApplicationsService {
     static async getFieldsForInpersonApplication() {
         return await applicationsRepository.getFieldsForInpersonApplication();
     }
+
+    static async getFieldsForRemoteApplication() {
+        return await applicationsRepository.getFieldsForRemoteApplication();
+    }
 }
 
 export default ApplicationsService;

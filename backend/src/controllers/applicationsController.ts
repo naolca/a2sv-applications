@@ -61,6 +61,15 @@ class ApplicationsController {
             res.status(500).json({ error: error.message });
         }
     }
+
+    static async getFieldsForRemoteApplication(req: MyUserRequest, res: Response) {
+        try {
+            const fields = await ApplicationsService.getFieldsForRemoteApplication();
+            res.status(200).json(fields);
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    }
 }
 
 export default ApplicationsController;

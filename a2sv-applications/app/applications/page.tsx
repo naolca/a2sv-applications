@@ -51,12 +51,7 @@ export default function Applications() {
         <Box sx={{ bgcolor: 'background.default', justifyContent:"center", alignItems:"center", rowGap:3 }}>
             <ToggleColorMode mode={mode} toggleColorMode={toggleColorMode} />
             <Hero />
-            {
-                textInputs.map((input, index) => (
-                  
-                  idx == index && <TextInputCard key={index} label={input.label} example={input.example}  />
-                ))
-            }
+           <FileInputCard label="Upload Resume" />
             </Box>
          </ThemeProvider>
     )
