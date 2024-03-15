@@ -37,6 +37,10 @@ export default function Applications() {
     const next = () => {
         setIndex((prevIndex) => (prevIndex + 1));
       }
+      const back = () => {
+    
+        setIndex((prevIndex) => (prevIndex - 1));
+      }
 
 
   
@@ -50,7 +54,7 @@ export default function Applications() {
             {
                 textInputs.map((input, index) => (
                   
-                  idx == index && <TextInputCard key={index} label={input.label} example={input.example} onClick={next} />
+                  idx == index && <TextInputCard key={index} label={input.label} example={input.example}  />
                 ))
             }
             </Box>

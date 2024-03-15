@@ -3,13 +3,18 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Container from "@mui/material/Container";
-import { Button, FormControl, FormGroup } from "@mui/material";
+import { Button, FormControl, FormGroup, SvgIcon } from "@mui/material";
 import { motion } from "framer-motion";
-
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import React from "react";
 interface TextInputCardProps {
   label: string;
   example?: string;
-  onClick?: () => void;
+  backClick?: () => void;
+  nextClick?: () => void;
   value?: string;
 }
 
@@ -17,11 +22,25 @@ export default function TextInputCard({
   label,
   example,
   value,
-  onClick,
+  backClick,
+  nextClick,
 }: TextInputCardProps) {
+  const [fromRight, setFromRight] = React.useState(true);
+
+  const handleNextClick = () => {
+    console.log("next clicked");
+    setFromRight(true);
+    if (nextClick) nextClick();
+  };
+  const handleBackClick = () => {
+    console.log("back clicked");
+    setFromRight(false);
+    if (backClick) backClick();
+  };
+
   return (
     <Box
-      onClick={onClick}
+      key={fromRight ? "right" : "left"}
       maxHeight={400}
       maxWidth={700}
       display="flex"
@@ -30,10 +49,14 @@ export default function TextInputCard({
       m={"auto"}
       gap={4}
       component={motion.section}
-      initial={{ opacity: 0, x: "100vw" }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: "100vw", transition: { duration: 2 } }} 
-      transition={{ type: "tween", duration: 2 }}
+      initial={{opacity:0, y: fromRight ? "700" : "-100vh" }}
+      animate={{ opacity: 1, x: 0, y: 0}}
+      exit={{
+        opacity: 0,
+        y: fromRight ? "-100vh" : "100vh",
+        transition: { duration: 1 },
+      }}
+      transition={{ type: "tween", duration: 1 }}
     >
       <Container
         sx={{
@@ -76,7 +99,7 @@ export default function TextInputCard({
               justifyContent="start"
               p={2}
               gap={2}
-              sx={{ width: "100%" }}
+              sx={{ width: "100%", height: "100%" }}
             >
               <Typography
                 variant="h5"
@@ -117,22 +140,47 @@ export default function TextInputCard({
                 variant="standard"
                 value={value}
               />
-              <Button
-                variant="contained"
-                type="submit"
-                sx={{
-                  color: (theme) =>
-                    theme.palette.mode === "light" ? "black" : "white",
-                  alignSelf: "start",
-                  backgroundColor: (theme) =>
-                    theme.palette.mode === "light"
-                      ? "primary.main"
-                      : "primary.light",
-                }}
-                size="large"
-              >
-                Submit
-              </Button>
+              <div className="flex self-end">
+                <SvgIcon
+                  
+                  component={ArrowUpwardIcon}
+                  onClick={handleBackClick}
+                  sx={{
+                    color: (theme) =>
+                      theme.palette.mode === "light" ? "black" : "white",
+                    alignSelf: "start",
+                    position: "relative",
+                    left: 0,
+                    bottom: 0,
+                    cursor: "pointer",
+                    ":hover":{
+                      color: (theme) =>
+                      theme.palette.mode === "light" ? "primary.main" : "primary.light",
+                    },
+                    transition: "color 0.5s",
+                  }}
+                />
+
+                <SvgIcon
+                  onClick={handleNextClick}
+                  sx={{
+                    color: (theme) =>
+                      theme.palette.mode === "light" ? "black" : "white",
+                    alignSelf: "end",
+                    position: "relative",
+                    right: 0,
+                    bottom: 0,
+                    cursor: "pointer",
+                    ":hover":{
+                      color: (theme) =>
+                      theme.palette.mode === "light" ? "primary.main" : "primary.light",
+                    },
+                    transition: "color 0.5s",
+                  }}
+                  component={ArrowDownwardIcon}
+                  
+                />
+              </div>
             </Box>
           </FormGroup>
         </Card>
