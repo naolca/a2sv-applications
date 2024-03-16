@@ -34,7 +34,6 @@ export default function inperson() {
 
 
   const next = () => {
-    console.log("increase index");
     setIndex((prevIndex) => (prevIndex + 1));
   }
   const back = () => {
@@ -73,7 +72,6 @@ export default function inperson() {
   return (
     <ThemeProvider theme={showCustomTheme ? LPtheme : defaultTheme}>
     <Box sx={{ bgcolor: 'background.default', justifyContent:"center", alignItems:"center", rowGap:10, minHeight:'100vh', columnGap:10 }}>
-
       {
        inputs[idx]
       }
