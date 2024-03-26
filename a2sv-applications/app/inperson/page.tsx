@@ -1,84 +1,200 @@
-'use client';
+"use client";
 
-import { Box, Button, PaletteMode, ThemeProvider, createTheme } from "@mui/material";
+import {
+  Alert,
+  Box,
+  Button,
+  CircularProgress,
+  Grid,
+  PaletteMode,
+  Snackbar,
+  ThemeProvider,
+  createTheme,
+} from "@mui/material";
 import React from "react";
 import TextInputCard from "../components/TextInputCard";
 import getTheme from "../getTheme";
-import SendIcon from '@mui/icons-material/Send';
+import SendIcon from "@mui/icons-material/Send";
+import CheckIcon from "@mui/icons-material/Check";
 
-import { useGetInpersonApplicationsQuery } from "../redux/slices/applications_slice";
+import {
+  useGetInpersonApplicationsQuery,
+  useAddApplicationMutation,
+} from "../redux/slices/applications_slice";
 import DropDownInputCard from "../components/DropDownInputCard";
 import RadioInputCard from "../components/RadioInputCard";
-
-
-interface Data {
-  texts: any[]; 
-  numbers: any[];
-  dropdowns: any[]; 
-  checkboxes: any[]; 
-  radios: any[]; 
-}
-
-// ...
+import { set } from "mongoose";
+import CustomSnackBar from "../components/Snackbar";
+import { forms } from "googleapis/build/src/apis/forms";
 
 export default function inperson() {
-
   const [idx, setIndex] = React.useState(0);
-  const [mode, setMode] = React.useState<PaletteMode>('dark');
+  const [mode, setMode] = React.useState<PaletteMode>("dark");
   const [showCustomTheme, setShowCustomTheme] = React.useState(true);
   const LPtheme = createTheme(getTheme(mode));
   const defaultTheme = createTheme({ palette: { mode } });
-  const {
-    data, isLoading, isError
-  } = useGetInpersonApplicationsQuery({});
 
+  const [form, setForm] = React.useState<any>([]);
+  const { data, isLoading, isError } = useGetInpersonApplicationsQuery({});
+  const [addApplication, { isSuccess }] = useAddApplicationMutation();
+  const [open, setOpen] = React.useState(false);
+  const [success, setSuccess] = React.useState(false);
+
+  const handleSumbmit = async () => {
+    for (let i = 0; i < form.length; i++) {
+      if (form[i].value === "") {
+        setOpen(true);
+        return;
+      }
+    }
+    addApplication({
+      for: "IP",
+      fields: form,
+    });
+
+    console.log("formData");
+  };
 
   const next = () => {
-    setIndex((prevIndex) => (prevIndex + 1));
-  }
+    setIndex((prevIndex) => prevIndex + 1);
+  };
   const back = () => {
+    setIndex((prevIndex) => prevIndex - 1);
+  };
 
-    setIndex((prevIndex) => (prevIndex - 1));
+  const formDataChange = (e: any, i: any) => {
+    e.preventDefault();
+
+    setForm((prev: any) => {
+      const newform = [...prev];
+      newform[i] = { ...newform[i], value: e.target.value };
+      return newform;
+    });
+  };
+
+  // React.useEffect(() => {
+  //   console.log("formData", formData[idx]);
+  // }, [formData, idx]);
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      if (data) {
+        setForm(data);
+      }
+      if (isSuccess) {
+        setSuccess(true);
+      }
+    };
+    fetchData();
+  }, [data, isSuccess]);
+
+  if (success) {
+    <Alert icon={<CheckIcon fontSize="inherit" />} severity="success">
+      Here is a gentle confirmation that your action was successful.
+    </Alert>;
   }
 
-    if (isLoading) return <div>Loading</div>
-    if (isError) return <div>Error</div>
-    if (data) {
-      // unpack the data to different variables
-      console.log(data)
-      const {texts, numbers, dropdowns, checkboxes, radios} = data as Data;
-      const textsArray = [];
-      for (let i = 0; i < texts.length; i++) {
-        textsArray.push(<TextInputCard key={i} label={texts[i].label} example={texts[i].example}  backClick={back} nextClick={next}  />);
-      }
-
-      const dropdownsArray = [];
-      for (let i = 0; i < dropdowns.length; i++) {
-        dropdownsArray.push(<DropDownInputCard  label={dropdowns[i].label} choices = {dropdowns[i].choices} nextClick = {next} backClick = {back}   />);
-      }
-
-      const radiosArray = [];
-      for (let i = 0; i < checkboxes.length; i++) {
-        radiosArray.push(<RadioInputCard key={i} label={radios[i].label} choices = {radios[i].choices} backClick={back} nextClick={next}   />);
-      }
-      const inputs =[...radiosArray, ...textsArray, ...radiosArray];
-      
-
-    
-
-  
-
-  
   return (
     <ThemeProvider theme={showCustomTheme ? LPtheme : defaultTheme}>
-    <Box sx={{ bgcolor: 'background.default', justifyContent:"center", alignItems:"center", rowGap:10, minHeight:'100vh', columnGap:10 }}>
-      {
-       inputs[idx]
-      }
-    </Box>
+      <Snackbar
+        open={open}
+        autoHideDuration={6000}
+        message="Please Fill all the fields"
+      />
+
+      <Box
+        sx={{
+          bgcolor: "background.default",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          rowGap: 10,
+          minHeight: "100vh",
+          columnGap: 2,
+          flexDirection: "column",
+          maxWidth: "100%",
+          margin: "auto",
+        }}
+      >
+        {isLoading && (
+          <Box margin={"auto"} sx={{ display: "flex" }}>
+            <CircularProgress
+              size={40}
+              sx={{
+                color: "primary.main",
+              }}
+            />
+          </Box>
+        )}
+        <Grid container direction={"column"} spacing={2} alignContent={'center'}>
+          {form.map((item: any, index: number) => {
+            switch (item.type) {
+              case "text":
+                return (
+                  <Grid
+                    item
+                    lg
+                    key={index}
+                    sx={{ display: "flex", }}
+                  >
+                    <TextInputCard
+                      key={index}
+                      label={item.label}
+                      example={item.example}
+                      idx={index}
+                      onChange={formDataChange}
+                    />
+                  </Grid>
+                );
+              case "dropdown":
+                return (
+                  <Grid item xs={12}  key={index}>
+                    <DropDownInputCard
+                      key={index}
+                      label={item.label}
+                      choices={item.choices}
+                      nextClick={next}
+                      backClick={back}
+                      idx={index}
+                      onChange={formDataChange}
+                    />
+                  </Grid>
+                );
+              case "radio":
+                return (
+                  <Grid item xs key={index}>
+                    <RadioInputCard
+                      key={index}
+                      label={item.label}
+                      choices={item.choices}
+                      onChange={formDataChange}
+                      idx={index}
+                    />
+                  </Grid>
+                );
+
+              default:
+                return null;
+            }
+          })}
+        </Grid>
+
+        <Button
+          variant="contained"
+          type="submit"
+          sx={{
+            bgcolor: "primary.main",
+            color: "white",
+            "&:hover": {
+              bgcolor: "primary.dark",
+            },
+            alignSelf: "center",
+          }}
+          onClick={handleSumbmit}
+        >
+          Submit
+        </Button>
+      </Box>
     </ThemeProvider>
-   
   );
-    }
-    
 }

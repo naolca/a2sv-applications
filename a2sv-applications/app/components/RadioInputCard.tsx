@@ -27,6 +27,8 @@ interface RadioInputCardProps {
   value?: string;
   nextClick?: () => void;
   backClick?: () => void;
+  onChange?: (e: any,i:any) => void;
+  idx:any;
 }
 
 export default function RadioInputCard({
@@ -35,22 +37,33 @@ export default function RadioInputCard({
   value,
   nextClick,
   backClick,
+  onChange,
+  idx
 }: RadioInputCardProps) {
+
+
+  const change = (e: any) => {
+    if (onChange) onChange(e, idx);
+  }
+
   return (
     <Box
-      height={400}
-      width={700}
+      maxHeight={1000}
+      maxWidth={700}
+      
+     
       display="flex"
       alignItems="center"
       justifyContent="center"
-      m={"auto"}
+      
       gap={4}
       component="section"
+      
     >
       <Container
         sx={{
           width: "100%",
-          height: "100%",
+          
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -59,12 +72,10 @@ export default function RadioInputCard({
         <Card
           sx={{
             width: "100%",
-            height: "100%",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             flexDirection: "column",
-            p: 2,
             gap: 2,
             boxShadow: 3,
             rounded: 2,
@@ -77,7 +88,7 @@ export default function RadioInputCard({
               alignItems: "center",
               justifyContent: "center",
               flexDirection: "column",
-              p: 2,
+             
               gap: 2,
             }}
           >
@@ -113,6 +124,8 @@ export default function RadioInputCard({
                   aria-labelledby="demo-radio-buttons-group-label"
                   defaultValue="female"
                   name="radio-buttons-group"
+                  value={value}
+                  onChange={change}
                 >
                   {choices.map((choice, index) => (
                     <FormControlLabel

@@ -24,6 +24,8 @@ interface DropDownInputCardProps {
   value?: string;
   nextClick?: () => void;
   backClick?: () => void;
+  onChange?: (e: any, i:any) => void;
+  idx: any;
 }
 
 export default function DropDownInputCard({
@@ -32,23 +34,27 @@ export default function DropDownInputCard({
   value,
   nextClick,
   backClick,
+  onChange,
+  idx
 }: DropDownInputCardProps) {
   const [currentChoice, setCurrentChoice] = React.useState("");
 
   const handleChange = (e: any) => {
-    e.preventDefault();
+  
+    // e.preventDefault();
+    if (onChange) onChange(e, idx);
     setCurrentChoice(e.target.value);
   };
 
   return (
     <Box
      
-      maxHeight={400}
+      maxHeight={700}
       maxWidth={700}
       display="flex"
       alignItems="center"
       justifyContent="center"
-      m={"auto"}
+     
       gap={4}
       component={motion.section}
       initial={{ opacity: 0, y: '100vh'  }}
@@ -59,6 +65,7 @@ export default function DropDownInputCard({
         transition: { duration: 1 },
       }}
       transition={{ type: "tween", duration: 1 }}
+    
     >
       <Container
         sx={{
@@ -77,7 +84,7 @@ export default function DropDownInputCard({
             alignItems: "center",
             justifyContent: "center",
             flexDirection: "column",
-            p: 2,
+          
             gap: 2,
             boxShadow: 3,
             rounded: 2,

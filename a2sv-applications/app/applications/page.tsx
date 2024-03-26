@@ -11,11 +11,7 @@ import DropDownInputCard from '../components/DropDownInputCard';
 import RadioInputCard from '../components/RadioInputCard';
 import FileInputCard from '../components/FileInputCard';
 
-const textInputs = [
-    { label: "First Name", example: "John" },
-    { label: "Last Name", example: "Doe" },
-    { label: "Email", example: "firaolibrahim@gmail.com"  },
-]
+
 
 
 export default function Applications() {
@@ -51,7 +47,7 @@ export default function Applications() {
         <Box sx={{ bgcolor: 'background.default', justifyContent:"center", alignItems:"center", rowGap:3 }}>
             <ToggleColorMode mode={mode} toggleColorMode={toggleColorMode} />
             <Hero />
-           <FileInputCard label="Upload Resume" />
+           
             </Box>
          </ThemeProvider>
     )

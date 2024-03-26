@@ -7,15 +7,18 @@ import { Button, FormControl, FormGroup, SvgIcon } from "@mui/material";
 import { motion } from "framer-motion";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import React from "react";
+import { Key } from "@mui/icons-material";
 interface TextInputCardProps {
   label: string;
   example?: string;
   backClick?: () => void;
   nextClick?: () => void;
+  onChange?: (e: any, i: any) => void;
   value?: string;
+  idx: any;
 }
 
 export default function TextInputCard({
@@ -24,11 +27,16 @@ export default function TextInputCard({
   value,
   backClick,
   nextClick,
+  onChange,
+  idx,
 }: TextInputCardProps) {
   const [fromRight, setFromRight] = React.useState(true);
 
+  const change = (e: any) => {
+    if (onChange) onChange(e, idx);
+  };
+
   const handleNextClick = () => {
-    console.log("next clicked");
     setFromRight(true);
     if (nextClick) nextClick();
   };
@@ -40,17 +48,17 @@ export default function TextInputCard({
 
   return (
     <Box
-      key={fromRight ? "right" : "left"}
-      maxHeight={400}
+      maxHeight={700}
       maxWidth={700}
+      minWidth={'100%'}
       display="flex"
       alignItems="center"
       justifyContent="center"
-      m={"auto"}
+      
       gap={4}
       component={motion.section}
-      initial={{opacity:0, y: fromRight ? "700" : "-100vh" }}
-      animate={{ opacity: 1, x: 0, y: 0}}
+      initial={{ opacity: 0, y: fromRight ? "700" : "-100vh" }}
+      animate={{ opacity: 1, x: 0, y: 0 }}
       exit={{
         opacity: 0,
         y: fromRight ? "-100vh" : "100vh",
@@ -61,24 +69,24 @@ export default function TextInputCard({
       <Container
         sx={{
           width: "100%",
-          height: "100%",
-          display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          
+          
         }}
       >
         <Card
           sx={{
             width: "100%",
-            height: "100%",
-            display: "flex",
+              flex: 1,
             alignItems: "center",
             justifyContent: "center",
             flexDirection: "column",
-            p: 2,
+            
             gap: 2,
             boxShadow: 3,
             rounded: 2,
+           
           }}
         >
           <FormGroup
@@ -139,10 +147,10 @@ export default function TextInputCard({
                 maxRows={4}
                 variant="standard"
                 value={value}
+                onChange={change}
               />
               <div className="flex self-end">
                 <SvgIcon
-                  
                   component={ArrowUpwardIcon}
                   onClick={handleBackClick}
                   sx={{
@@ -153,9 +161,11 @@ export default function TextInputCard({
                     left: 0,
                     bottom: 0,
                     cursor: "pointer",
-                    ":hover":{
+                    ":hover": {
                       color: (theme) =>
-                      theme.palette.mode === "light" ? "primary.main" : "primary.light",
+                        theme.palette.mode === "light"
+                          ? "primary.main"
+                          : "primary.light",
                     },
                     transition: "color 0.5s",
                   }}
@@ -171,14 +181,15 @@ export default function TextInputCard({
                     right: 0,
                     bottom: 0,
                     cursor: "pointer",
-                    ":hover":{
+                    ":hover": {
                       color: (theme) =>
-                      theme.palette.mode === "light" ? "primary.main" : "primary.light",
+                        theme.palette.mode === "light"
+                          ? "primary.main"
+                          : "primary.light",
                     },
                     transition: "color 0.5s",
                   }}
                   component={ArrowDownwardIcon}
-                  
                 />
               </div>
             </Box>
