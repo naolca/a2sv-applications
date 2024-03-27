@@ -14,6 +14,9 @@ import PersonIcon from "@mui/icons-material/Person";
 import LanguageIcon from "@mui/icons-material/Language";
 import EditIcon from "@mui/icons-material/Edit";
 
+
+
+
 /* import image from next/image */
 import Image from "next/image";
 
@@ -123,7 +126,9 @@ Nav.propTypes = {
 // ----------------------------------------------------------------------
 
 function NavItem({ item }: { item: any }) {
-  const active = item.title == item.active;
+  const location = useLocation();
+
+  const active = location.pathname == item.path;
 
   return (
     <ListItemButton

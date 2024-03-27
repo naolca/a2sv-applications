@@ -58,7 +58,12 @@ export const applicationsApi = createApi({
       }),
       invalidatesTags: ["Application"],
     }),
+
+    getSchoolStats: builder.query({
+      query: () => "schoolstats",
+    }),
   }),
+
 });
 
 // export the hooks
@@ -70,4 +75,5 @@ export const {
   useGetApplicationStatsQuery,
   useAddTextFieldMutation,
   useAddDropdownFieldMutation,
+  useGetSchoolStatsQuery,
 } = applicationsApi;

@@ -16,6 +16,7 @@ import TextInputCard from "../components/TextInputCard";
 import getTheme from "../getTheme";
 import SendIcon from "@mui/icons-material/Send";
 import CheckIcon from "@mui/icons-material/Check";
+import CustomSnackbar from "../components/Snackbar";
 
 import {
   useGetInpersonApplicationsQuery,
@@ -38,21 +39,32 @@ export default function inperson() {
   const { data, isLoading, isError } = useGetInpersonApplicationsQuery({});
   const [addApplication, { isSuccess }] = useAddApplicationMutation();
   const [open, setOpen] = React.useState(false);
-  const [success, setSuccess] = React.useState(false);
+  const [success, setSuccess] = React.useState<boolean>(false);
+
+
+
+
+  React.useEffect(() => {
+    if (isSuccess) {
+      console.log("is success", isSuccess);
+      setSuccess(true);
+    }
+  }, [isSuccess]);
 
   const handleSumbmit = async () => {
-    for (let i = 0; i < form.length; i++) {
-      if (form[i].value === "") {
-        setOpen(true);
-        return;
-      }
-    }
-    addApplication({
+    // for (let i = 0; i < form.length; i++) {
+    //   if (form[i].value === "") {
+    //     setOpen(true);
+    //     return;
+    //   }
+    // }
+    await addApplication({
       for: "IP",
       fields: form,
     });
 
-    console.log("formData");
+   
+    // setSuccess(true);
   };
 
   const next = () => {
@@ -76,23 +88,22 @@ export default function inperson() {
   //   console.log("formData", formData[idx]);
   // }, [formData, idx]);
 
+  if (isSuccess) {
+   "here mane"
+
+    
+  }
   React.useEffect(() => {
     const fetchData = async () => {
       if (data) {
         setForm(data);
       }
-      if (isSuccess) {
-        setSuccess(true);
-      }
+      
+      
     };
     fetchData();
-  }, [data, isSuccess]);
+  }, [data]);
 
-  if (success) {
-    <Alert icon={<CheckIcon fontSize="inherit" />} severity="success">
-      Here is a gentle confirmation that your action was successful.
-    </Alert>;
-  }
 
   return (
     <ThemeProvider theme={showCustomTheme ? LPtheme : defaultTheme}>
@@ -101,6 +112,8 @@ export default function inperson() {
         autoHideDuration={6000}
         message="Please Fill all the fields"
       />
+
+     { success && <CustomSnackBar isOpen={success} />}
 
       <Box
         sx={{

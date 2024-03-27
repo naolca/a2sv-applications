@@ -36,17 +36,7 @@ export default function Header({ onOpenNav }: { onOpenNav: any }) {
 
       <Box sx={{ flexGrow: 1 }} />
 
-      <Stack direction="row" alignItems="center" spacing={1}>
-        <IconButton>
-          <Iconify icon="eva:search-fill" />
-        </IconButton>
-        <IconButton>
-          <Iconify icon="eva:heart-fill" />
-        </IconButton>
-        <IconButton>
-          <Iconify icon="eva:menu-2-fill" />
-        </IconButton>
-      </Stack>
+      
     </>
   );
 

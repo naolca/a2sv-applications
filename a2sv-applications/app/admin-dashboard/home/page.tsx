@@ -15,12 +15,15 @@ import LanguageIcon from "@mui/icons-material/Language";
 import PeopleIcon from "@mui/icons-material/People";
 import AppCurrentVisits from "@/app/components/app-current-visits";
 
-import { useGetApplicationStatsQuery } from "@/app/redux/slices/applications_slice";
+import { useGetApplicationStatsQuery, useGetSchoolStatsQuery } from "@/app/redux/slices/applications_slice";
+
 import { useEffect, useState } from "react";
 import { Box, CircularProgress } from "@mui/material";
+import { School } from '@mui/icons-material';
 
 export default function AdminDashboardHome() {
   const { data, error, isLoading } = useGetApplicationStatsQuery({});
+  const { data: schoolStats, error: schoolStatsError, isLoading: schoolStatsLoading } = useGetSchoolStatsQuery({}) as any;
 
   const [stats, setStats] = useState({} as any);
 
@@ -29,6 +32,10 @@ export default function AdminDashboardHome() {
       if (data) {
         console.log(data);
         setStats(data);
+      }
+      if (schoolStats) {
+        console.log("schoolStats");
+        console.log(schoolStats);
       }
     };
     fetchData();
@@ -54,7 +61,7 @@ export default function AdminDashboardHome() {
       <Grid container spacing={3} 
        
       >
-        <Grid xs={12} sm={6} md={3}>
+        <Grid item >
           <AppWidgetSummary
             title="Total Applications"
             total={stats.total}
@@ -69,7 +76,7 @@ export default function AdminDashboardHome() {
           />
         </Grid>
 
-        <Grid xs={12} sm={6} md={3}>
+        <Grid item>
           <AppWidgetSummary
             title="Inperson Applicants"
             total={stats.IP}
@@ -84,7 +91,7 @@ export default function AdminDashboardHome() {
           />
         </Grid>
 
-        <Grid xs={12} sm={6} md={3}>
+        <Grid item >
           <AppWidgetSummary
             title="Remote Applicants"
             total={stats.RE}
@@ -99,7 +106,7 @@ export default function AdminDashboardHome() {
           />
         </Grid>
 
-        <Grid xs={12} sm={6} md={3}>
+        <Grid item >
           <AppWidgetSummary
             title="Community Applicants"
             total={10}
@@ -131,6 +138,7 @@ export default function AdminDashboardHome() {
       
       >
         <Grid
+          item
           flex={1}
           sx={{
             mr: 2,
@@ -150,20 +158,23 @@ export default function AdminDashboardHome() {
           />
         </Grid>
 
-        <Grid
-        >
+        <Grid item>
+          {schoolStatsLoading && <CircularProgress />}
+          {schoolStatsError && <div>Error</div>}
+          { schoolStats &&
           <AppCurrentVisits
-            title="Current Visits"
+            title="School stats"
             chart={{
               series: [
-                { label: "Inperson", value: stats.IP },
-                { label: "Remote", value: stats.RE },
-                { label: "Community", value: 10 },
+                { label: "AAU", value: schoolStats.AAU ? schoolStats.AAU : 0},
+                { label: "AASTU", value: schoolStats.AASTU ? schoolStats.AASTU : 0},
+                { label: "ASTU", value: schoolStats.ASTU ?  schoolStats.ASTU : 0},
               ],
               colors: ["#00AB55", "#FFC107", "#FF5722"],
             }}
             subheader={""}
           />
+}
         </Grid>
       </Grid>
     </Container>
